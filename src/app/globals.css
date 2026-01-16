@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: var(--font-inter);
+  --font-script: var(--font-sacramento);
+
+  /* Pastel Color Palette */
+  --color-pastel-cream: #FDF6F0;
+  --color-pastel-pink: #F8D7DA;
+  --color-pastel-rose: #F5B5A0;
+  --color-pastel-lavender: #E8DFF5;
+  --color-pastel-purple: #9B7EBD;
+  --color-pastel-mint: #A8D5BA;
+  --color-pastel-sage: #C4DFB8;
+  --color-pastel-sky: #B8D4E3;
+  --color-pastel-peach: #FFDAB9;
+  
+  /* Dark variants for text */
+  --color-pastel-purple-dark: #6B4E8D;
+  --color-pastel-text: #5D4E6D;
+  --color-pastel-text-light: #8B7E9B;
+
+  /* Legacy sage colors (keeping for backwards compatibility) */
+  --color-sage-50: #f4f7f4;
+  --color-sage-100: #e3efe3;
+  --color-sage-200: #cce4cc;
+  --color-sage-300: #D6E6CC;
+  --color-sage-400: #9cbda0;
+  --color-sage-500: #7a9c7d;
+  --color-sage-900: #1a261b;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-pastel-cream text-pastel-text;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Lenis smooth scroll styles */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Text gradient utility */
+  .text-gradient-pastel {
+    @apply bg-gradient-to-r from-pastel-purple via-pastel-pink to-pastel-rose bg-clip-text text-transparent;
+  }
+
+  /* Glassmorphism utility */
+  .glass {
+    @apply bg-white/40 backdrop-blur-md border border-white/20;
+  }
+
+  /* Soft shadow */
+  .shadow-soft {
+    box-shadow: 0 10px 40px -10px rgba(155, 126, 189, 0.3);
+  }
 }
