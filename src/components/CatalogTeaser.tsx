@@ -22,7 +22,7 @@ export function CatalogTeaser() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.5 }}
         >
           <h2 className="text-6xl md:text-8xl font-script text-white drop-shadow-sm">
             Collections
@@ -40,7 +40,7 @@ export function CatalogTeaser() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.4 }}
               className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-[2.5rem] p-8 h-80 flex flex-col justify-between transition-all duration-500 hover:bg-white hover:border-white/40 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] cursor-pointer overflow-hidden"
             >
               {/* Top Accent Dot */}

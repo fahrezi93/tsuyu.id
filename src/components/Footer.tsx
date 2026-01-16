@@ -50,9 +50,6 @@ export function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <p className="text-sm text-pastel-text-light flex items-center justify-center gap-1">
-            Made with <Heart className="w-4 h-4 text-pastel-pink fill-pastel-pink" /> in Jakarta
-          </p>
           <p className="text-xs text-pastel-text-light/60 mt-2">
             &copy; {currentYear} {STORE_CONFIG.name}. All Rights Reserved.
           </p>

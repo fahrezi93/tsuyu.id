@@ -12,7 +12,7 @@ import Image from "next/image";
 function AnimatedStar({ delay, x, y, size }: { delay: number; x: string; y: string; size: number }) {
     return (
         <motion.div
-            className="absolute text-pastel-purple"
+            className="absolute text-pastel-purple will-change-transform"
             style={{ left: x, top: y }}
             animate={{
                 opacity: [0.2, 0.8, 0.2],
@@ -44,7 +44,7 @@ export function ParallaxHero() {
     // Parallax transforms for different layers - different speeds create depth
     const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
     const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
-    const textY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+    const textY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
     // Wave Parallax transforms
@@ -57,7 +57,8 @@ export function ParallaxHero() {
     const [stars, setStars] = useState<{ id: number; x: string; y: string; size: number; delay: number }[]>([]);
 
     useEffect(() => {
-        const generatedStars = Array.from({ length: 30 }, (_, i) => ({
+        const starCount = window.innerWidth < 768 ? 12 : 30; // Reduce stars on mobile
+        const generatedStars = Array.from({ length: starCount }, (_, i) => ({
             id: i,
             x: `${5 + Math.random() * 90}%`,
             y: `${5 + Math.random() * 85}%`,
@@ -65,6 +66,15 @@ export function ParallaxHero() {
             delay: Math.random() * 3,
         }));
         setStars(generatedStars);
+    }, []);
+
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth < 768);
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     return (
@@ -104,7 +114,7 @@ export function ParallaxHero() {
 
             {/* Main Content - Moves at medium speed */}
             <motion.div
-                className="relative z-20 h-screen flex flex-col items-center justify-start pt-[25vh] text-center px-4"
+                className="relative z-20 h-screen flex flex-col items-center justify-center md:justify-start md:pt-[15vh] text-center px-4"
                 style={{ y: textY, opacity }}
             >
                 {/* Brand Name */}
@@ -118,7 +128,10 @@ export function ParallaxHero() {
                         className="text-[6rem] md:text-[12rem] font-script text-white leading-normal select-none"
                         style={{
                             fontFamily: "'Sacramento', cursive",
-                            textShadow: "0 0 40px rgba(255,255,255,0.4), 0 0 80px rgba(155, 126, 189, 0.2)"
+                            // Optimized shadow using state to avoid hydration mismatch
+                            textShadow: isMobile
+                                ? "0 0 20px rgba(255,255,255,0.3)"
+                                : "0 0 40px rgba(255,255,255,0.4), 0 0 80px rgba(155, 126, 189, 0.2)"
                         }}
                     >
                         {STORE_CONFIG.name}
@@ -155,24 +168,24 @@ export function ParallaxHero() {
                 </motion.div>
             </motion.div>
             {/* Parallax Waves Layers - Reduced to 4 layers */}
-            <div className="absolute bottom-0 left-0 right-0 z-10 w-full h-[320px] md:h-[500px] lg:h-[700px] pointer-events-none select-none">
+            <div className="absolute bottom-0 left-0 right-0 z-10 w-full h-[200px] md:h-[320px] lg:h-[420px] pointer-events-none select-none">
                 {/* Layer 2 (Middle) */}
                 <motion.div
-                    className="absolute inset-x-0 bottom-0 h-[78%]"
+                    className="absolute inset-x-0 bottom-0 h-[85%]"
                     style={{ y: wave2Y }}
                 >
-                    <svg className="w-full h-full" viewBox="0 0 900 600" preserveAspectRatio="none">
-                        <path d="M0 439L13.7 440.7C27.3 442.3 54.7 445.7 82 453.3C109.3 461 136.7 473 163.8 472.8C191 472.7 218 460.3 245.2 456.8C272.3 453.3 299.7 458.7 327 462.5C354.3 466.3 381.7 468.7 409 467.8C436.3 467 463.7 463 491 461C518.3 459 545.7 459 573 459.7C600.3 460.3 627.7 461.7 654.8 464.2C682 466.7 709 470.3 736.2 474.2C763.3 478 790.7 482 818 480.7C845.3 479.3 872.7 472.7 886.3 469.3L900 466L900 601L886.3 601C872.7 601 845.3 601 818 601C790.7 601 763.3 601 736.2 601C709 601 682 601 654.8 601C627.7 601 600.3 601 573 601C545.7 601 518.3 601 491 601C463.7 601 436.3 601 409 601C381.7 601 354.3 601 327 601C299.7 601 272.3 601 245.2 601C218 601 191 601 163.8 601C136.7 601 109.3 601 82 601C54.7 601 27.3 601 13.7 601L0 601Z" fill="#af99cf" />
+                    <svg className="w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,208C1248,192,1344,192,1392,192L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" fill="#af99cf" />
                     </svg>
                 </motion.div>
 
                 {/* Layer 3 (Lower Middle) */}
                 <motion.div
-                    className="absolute inset-x-0 bottom-0 h-[62%]"
+                    className="absolute inset-x-0 bottom-0 h-[70%]"
                     style={{ y: wave3Y }}
                 >
-                    <svg className="w-full h-full" viewBox="0 0 900 600" preserveAspectRatio="none">
-                        <path d="M0 500L13.7 499.5C27.3 499 54.7 498 82 494.2C109.3 490.3 136.7 483.7 163.8 485.7C191 487.7 218 498.3 245.2 505.2C272.3 512 299.7 515 327 518.3C354.3 521.7 381.7 525.3 409 524.3C436.3 523.3 463.7 517.7 491 515C518.3 512.3 545.7 512.7 573 513C600.3 513.3 627.7 513.7 654.8 510C682 506.3 709 498.7 736.2 499.3C763.3 500 790.7 509 818 514.3C845.3 519.7 872.7 521.3 886.3 522.2L900 523L900 601L886.3 601C872.7 601 845.3 601 818 601C790.7 601 763.3 601 736.2 601C709 601 682 601 654.8 601C627.7 601 600.3 601 573 601C545.7 601 518.3 601 491 601C463.7 601 436.3 601 409 601C381.7 601 354.3 601 327 601C299.7 601 272.3 601 245.2 601C218 601 191 601 163.8 601C136.7 601 109.3 601 82 601C54.7 601 27.3 601 13.7 601L0 601Z" fill="#a58bc6" />
+                    <svg className="w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path d="M0,256L48,250.7C96,245,192,235,288,218.7C384,203,480,181,576,186.7C672,192,768,224,864,240C960,256,1056,256,1152,245.3C1248,235,1344,213,1392,202.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" fill="#a58bc6" />
                     </svg>
                 </motion.div>
 
@@ -180,8 +193,8 @@ export function ParallaxHero() {
                 <div
                     className="absolute inset-x-0 bottom-0 h-[45%]"
                 >
-                    <svg className="w-full h-full" viewBox="0 0 900 600" preserveAspectRatio="none">
-                        <path d="M0 531L13.7 534.7C27.3 538.3 54.7 545.7 82 548.7C109.3 551.7 136.7 550.3 163.8 548.5C191 546.7 218 544.3 245.2 546C272.3 547.7 299.7 553.3 327 556.5C354.3 559.7 381.7 560.3 409 556.3C436.3 552.3 463.7 543.7 491 539.2C518.3 534.7 545.7 534.3 573 537.5C600.3 540.7 627.7 547.3 654.8 553.8C682 560.3 709 566.7 736.2 569.2C763.3 571.7 790.7 570.3 818 562.3C845.3 554.3 872.7 539.7 886.3 532.3L900 525L900 601L886.3 601C872.7 601 845.3 601 818 601C790.7 601 763.3 601 736.2 601C709 601 682 601 654.8 601C627.7 601 600.3 601 573 601C545.7 601 518.3 601 491 601C463.7 601 436.3 601 409 601C381.7 601 354.3 601 327 601C299.7 601 272.3 601 245.2 601C218 601 191 601 163.8 601C136.7 601 109.3 601 82 601C54.7 601 27.3 601 13.7 601L0 601Z" fill="#9b7ebd" />
+                    <svg className="w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path d="M0,224L40,218.7C80,213,160,203,240,208C320,213,400,235,480,240C560,245,640,235,720,213.3C800,192,880,160,960,160C1040,160,1120,192,1200,208C1280,224,1360,224,1400,224L1440,224L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z" fill="#9b7ebd" />
                     </svg>
                 </div>
             </div>
